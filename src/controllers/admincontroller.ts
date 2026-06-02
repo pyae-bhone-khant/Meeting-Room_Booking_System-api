@@ -11,6 +11,7 @@ import { body, param, validationResult } from "express-validator";
 import { checkUserExists } from "../utils/admin.js";
 import bcrypt from "bcrypt";
 import { auth } from "../lib/auth.js";
+import { prisma } from "../lib/prisma.js";
 
 export const getAllUsers = async (
   req: Request,
@@ -117,6 +118,7 @@ export const getAllUsers = async (
 //   },
 // ]; 
 
+
 export const createUser = [
   body("name").isString().notEmpty(),
   body("email").isEmail().notEmpty(),
@@ -153,24 +155,36 @@ export const createUser = [
 
       const { name, email, password, role } = req.body;
 
-      const newUserResponse = await auth.api.signUpEmail({
+      // 🌟 ၁။ Better-Auth အား သူ့စနစ်အတိုင်း Secure ဖြစ်တဲ့ Password ဖန်တီးခိုင်းခြင်း
+      const authResponse = await auth.api.signUpEmail({
         body: {
           email: email,
           password: password,
           name: name,
-          role: role || "USER", 
-        }
+        },
+      });
+
+      if (!authResponse || !authResponse.user) {
+        throw new Error("Failed to create user via Better-Auth");
+      }
+
+      // 🌟 ၂။ ထွက်လာတဲ့ User ကိုမှ Prisma သုံးပြီး Role အား အတင်းသွားထည့်ပေးခြင်း (ဒါဆိုရင် လုံးဝ ကျိန်းသေသွားပါပြီ)
+      const updatedUser = await prisma.user.update({
+        where: { id: authResponse.user.id },
+        data: {
+          role: role || "USER",
+        },
       });
 
       return res.status(201).json({
         success: true,
-        message: "User created successfully via Better-Auth engine",
-        data: newUserResponse.user,
+        message: "User created successfully with role mapping",
+        data: updatedUser,
       });
 
     } catch (error: any) {
-      
-      if (error.code === "EMAIL_ALREADY_EXISTS" || error.status === 400) {
+      // Email ရှိပြီးသားပြဿနာကို ဖမ်းရန်
+      if (error.code === "EMAIL_ALREADY_EXISTS" || error.status === 400 || error.message?.includes("already exists")) {
         return res.status(400).json({
           success: false,
           message: "Email already exists in the system",
