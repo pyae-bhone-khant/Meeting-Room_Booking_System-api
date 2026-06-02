@@ -22,6 +22,20 @@ export const auth = betterAuth({
   },
 
   baseURL: "https://meeting-room-booking-system-api.onrender.com",
+ advanced: {
+    cookies: {
+      sessionToken: {
+        // options အစား attributes ဟု သုံးရပါမည်
+        attributes: {
+          sameSite: "none", // 👈 Cross-site Context အတွက်
+          secure: true,     // HTTPS ပေါ်တွင်သာ အလုပ်လုပ်ရန်
+        }
+      }
+    },
+    crossSubdomainCookies: {
+      enabled: true,
+    }
+  },
 
   trustedOrigins: [
    "http://localhost:5173",
