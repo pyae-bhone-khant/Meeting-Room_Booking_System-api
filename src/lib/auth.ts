@@ -37,8 +37,8 @@ advanced: {
     sessionToken: {
       attributes: {
         // Local မှာဆိုရင် HTTP ကို ခွင့်ပြုဖို့အတွက် secure ကို false ထားပါ
-       SameSite:"None",
-       Secure:true,
+       sameSite:"none",
+       secure:true,
        partitioned: true,
       }
     }
