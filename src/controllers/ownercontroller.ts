@@ -1,7 +1,7 @@
 import type { Request, Response , NextFunction } from "express";
-import { prisma } from "../lib/prisma";
 import { param, validationResult } from "express-validator";
 import { DeleteBookingService, getBookingByDate } from "../services/user";
+import { getAllUsersService } from "../services/owner";
 
 export const deleteAnyBooking = [
   param('id').trim().notEmpty().withMessage('Booking ID is required'),
@@ -40,3 +40,40 @@ export const deleteAnyBooking = [
      })
   }
 ]
+
+export const getUserSummary = async (req : Request , res : Response , next : NextFunction) => {
+  try {
+      const userId = req.user.id;
+      const role = req.user.role;
+
+      if (!userId || !role) {
+        return res.status(401).json({
+          success : false , 
+          message : "Unauthorized"
+        })
+      } 
+      if (role !== "OWNER") {
+        return res.status(403).json({
+          success : false , 
+          message : "You don't have permission to access this resource"
+        })
+      } 
+
+      const userData = await getAllUsersService(); 
+      const formattedSummary = userData.map(user => ({
+       userId: user.id,
+      userName: user.name,
+      userEmail: user.email,
+      totalBookings: user._count.bookings,
+      bookings: user.bookings
+      }));
+
+      return res.status(200).json({
+        success: true,
+        data: formattedSummary
+      });
+      
+  } catch (error) {
+   next(error)
+  }
+}
