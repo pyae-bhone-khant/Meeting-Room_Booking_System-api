@@ -26,6 +26,6 @@ export const auth = betterAuth({
   trustedOrigins: [
    "http://localhost:5173",
     "http://localhost:3000",
-    "https://your-frontend-project.vercel.app"
+    "https://meeting-room-booking-system-neon.vercel.app"
   ],
 });

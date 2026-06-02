@@ -22,7 +22,7 @@ const app = express();
 const allowedOrigins = [
   "http://localhost:5173",                     // Local Vite Frontend
   "http://localhost:3000",                     // Local Next.js / React Frontend
-  "https://your-frontend-project.vercel.app"   // 👈 မင်းရဲ့ Frontend Public Live URL (အသစ်ထည့်ရန်)
+  "https://meeting-room-booking-system-neon.vercel.app"   // 👈 မင်းရဲ့ Frontend Public Live URL (အသစ်ထည့်ရန်)
 ];
 
 app.use(
