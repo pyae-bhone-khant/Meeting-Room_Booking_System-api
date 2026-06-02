@@ -2,7 +2,7 @@ import { Router } from "express";
 import { getAllBooking, getOwnBookings  , createBooking , } from "../../controllers/usercontroller";
 import { deleteAnyBooking , getUserSummary } from "../../controllers/ownercontroller";
 import { isAdmin, isAuthUser } from "../../middleware/auth";
-import { getAllUsers } from "../../controllers/admincontroller";
+import { getAllUsers , createUser } from "../../controllers/admincontroller";
 
 const router = Router();
 
@@ -11,6 +11,8 @@ router.get("/admin/getOwnBooking" , isAuthUser, isAdmin, getOwnBookings);
 router.post("/admin/createBooking" , isAuthUser, isAdmin, createBooking);
 router.delete("/admin/deleteBooking/:id" , isAuthUser, isAdmin, deleteAnyBooking);
 router.get("/admin/summary" , isAuthUser , isAdmin , getUserSummary);
+
 router.get("/admin/getAllUsers", isAuthUser, isAdmin, getAllUsers);
+router.post("/admin/createUser", isAuthUser, isAdmin,  createUser);
 
 export default router;
