@@ -1,3 +1,4 @@
+import { emitKeypressEvents } from "readline";
 import { prisma } from "../lib/prisma";
 
 export const getAllUsersService = () => {
@@ -40,3 +41,29 @@ export const createNewUser = async (userData: any) => {
         }
     });
 };
+
+export const getUserById = async (id: string) => {
+    return prisma.user.findUnique({
+        where: {
+            id: id
+        }
+    });
+}; 
+
+export const updateUserRole = async (id: string, role: string) => {
+    return prisma.user.update({
+        where: {
+            id: id
+        },
+        data: {
+            role: role as any
+        },
+        select: {
+            id: true,
+            name: true,
+            email: true,
+            role: true,
+            createdAt: true
+        }
+    });
+}; 
