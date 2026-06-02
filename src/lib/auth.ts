@@ -7,6 +7,7 @@ import { prisma } from "./prisma.js";
 // 🌟 👑 အဓိက ပြင်ဆင်လိုက်သည့်နေရာ: 
 // Custom Prisma Client အတွက် အနည်းဆုံး လိုအပ်သော configuration options များကို argument အဖြစ် ထည့်ပေးလိုက်ခြင်း
 
+console.log("AUTH LOADED");
 
 export const auth = betterAuth({
     baseURL: process.env.BETTER_AUTH_URL || "http://localhost:8080",
@@ -51,4 +52,3 @@ advanced: {
   ],
 });
 
-console.log("AUTH LOADED");
