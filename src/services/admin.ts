@@ -67,3 +67,12 @@ export const updateUserRole = async (id: string, role: string) => {
         }
     });
 }; 
+ 
+export const deleteUserById = async (id: string) => {
+    return prisma.user.delete({
+        where: {
+            id: id
+        }
+    });
+}; 
+ 

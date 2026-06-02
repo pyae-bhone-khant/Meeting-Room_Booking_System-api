@@ -3,6 +3,7 @@ import { prisma } from "../lib/prisma";
 import {
   checkUserByEmail,
   createNewUser,
+  deleteUserById,
   getAllUsersService,
   getUserById,
   updateUserRole,
@@ -159,7 +160,7 @@ export const changeUserRole = [
             message: "User already has this role",
           });
         } 
-        
+
       if (!user) {
         return res.status(404).json({
           success: false,
@@ -174,6 +175,58 @@ export const changeUserRole = [
         success: true,
         message: "User role updated successfully",
         data: updatedUser,
+      });
+    } catch (error) {
+      next(error);
+    }
+  },
+]; 
+
+export const deleteUser = [
+  param("id").trim().notEmpty().withMessage("User ID is required"),
+  async (req: Request, res: Response, next: NextFunction) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        success: false,
+        message: errors.array()[0]?.msg || "Validation failed",
+      });
+    }
+    try {
+      const adminRole = req.user.role;
+
+      if (adminRole !== "ADMIN") {
+        return res.status(403).json({
+          success: false,
+          message: "Access denied. Only Admins can delete users.",
+        });
+      }
+
+      const userId = req.params.id;
+
+      if (typeof userId !== "string") {
+        return res.status(400).json({
+          success: false,
+          message: "Invalid User ID format.",
+        });
+      }
+
+      const user = await getUserById(userId);
+
+      if (!user) {
+        return res.status(404).json({
+          success: false,
+          message: "User not found",
+        });
+      }
+
+      // Delete user
+      const deletedUser = await deleteUserById(userId);
+
+      return res.status(200).json({
+        success: true,
+        message: "User deleted successfully",
+        data: deletedUser,
       });
     } catch (error) {
       next(error);
