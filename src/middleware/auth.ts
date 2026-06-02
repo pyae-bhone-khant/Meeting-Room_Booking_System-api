@@ -35,3 +35,11 @@ export const isAdmin = (req: Request, res: Response, next: NextFunction) => {
     return res.status(403).json({ message: "Forbidden" });
   }
 };
+
+export const isOwner = (req: Request, res: Response, next: NextFunction) => {
+  if (req.user && req.user?.role === "OWNER") {
+    next();
+  } else {
+    return res.status(403).json({ message: "Forbidden" });
+  }
+}; 

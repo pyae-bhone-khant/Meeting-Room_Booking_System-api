@@ -6,7 +6,7 @@ import { auth } from "./lib/auth";
 import { error } from "node:console";
 import { errorHandler } from "./middleware/error-handler";
 import userRouter from "./routes/userroute/user";
-
+import ownerRouter from "./routes/ownerRoute/owner";
 
 const app = express();
 
@@ -34,7 +34,9 @@ app.all("/api/auth/*splat", toNodeHandler(auth));
 app.use(express.static("uploads"));
 app.use(express.json());
  
-app.use("/api/user", userRouter);
+app.use("/api", userRouter);
+app.use("/api", ownerRouter);
+
 app.get("/error", async (req, res) => {
   throw new Error("Test Error");
 });

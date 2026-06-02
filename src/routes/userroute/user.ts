@@ -4,9 +4,9 @@ import { isAuthUser } from "../../middleware/auth";
 
 const router = Router();
 
-router.get("/getAllBookings", isAuthUser,  getAllBooking );
-router.get("/getOwnBooking" , isAuthUser , getOwnBookings);
-router.post("/createBooking" , isAuthUser , createBooking);
-router.delete("/deleteBooking/:id" , isAuthUser , deleteBooking);
+router.get("/user/getAllBookings", isAuthUser,  getAllBooking );
+router.get("/user/getOwnBooking" , isAuthUser , getOwnBookings);
+router.post("/user/createBooking" , isAuthUser , createBooking);
+router.delete("/user/deleteBooking/:id" , isAuthUser , deleteBooking);
 
 export default router;
