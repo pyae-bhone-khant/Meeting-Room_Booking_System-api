@@ -12,11 +12,33 @@ import adminRouter from "./routes/adminRoute/admin.js";
 const app = express();
 
 
+// app.use(
+//   cors({
+//     origin: "http://localhost:5173", // Replace with your frontend's origin
+//     methods: ["GET", "POST", "PUT", "DELETE"], // Specify allowed HTTP methods
+//     credentials: true, // Allow credentials (cookies, authorization headers, etc.)
+//   }),
+// );
+const allowedOrigins = [
+  "http://localhost:5173",                     // Local Vite Frontend
+  "http://localhost:3000",                     // Local Next.js / React Frontend
+  "https://your-frontend-project.vercel.app"   // 👈 မင်းရဲ့ Frontend Public Live URL (အသစ်ထည့်ရန်)
+];
+
 app.use(
   cors({
-    origin: "http://localhost:5173", // Replace with your frontend's origin
-    methods: ["GET", "POST", "PUT", "DELETE"], // Specify allowed HTTP methods
-    credentials: true, // Allow credentials (cookies, authorization headers, etc.)
+    origin: (origin, callback) => {
+      // Allow requests with no origin (like mobile apps or curl requests)
+      if (!origin) return callback(null, true);
+      
+      if (allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true, // 👈 Better-Auth ရဲ့ Session Cookies တွေအတွက် ဒါက မဖြစ်မနေ True ထားရပါမယ်
   }),
 );
 
