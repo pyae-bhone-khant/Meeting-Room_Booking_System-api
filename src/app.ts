@@ -11,14 +11,6 @@ import adminRouter from "./routes/adminRoute/admin.js";
 
 const app = express();
 
-
-// app.use(
-//   cors({
-//     origin: "http://localhost:5173", // Replace with your frontend's origin
-//     methods: ["GET", "POST", "PUT", "DELETE"], // Specify allowed HTTP methods
-//     credentials: true, // Allow credentials (cookies, authorization headers, etc.)
-//   }),
-// );
 const allowedOrigins = [
   "http://localhost:5173",                     // Local Vite Frontend
   "http://localhost:3000",                     // Local Next.js / React Frontend
@@ -52,10 +44,10 @@ const limiter = rateLimit({
 
 app.use(limiter);
 
+app.use(express.json());
 app.all("/api/auth/*splat", toNodeHandler(auth));
 
 app.use(express.static("uploads"));
-app.use(express.json());
  
 app.use("/api", userRouter);
 app.use("/api", ownerRouter);

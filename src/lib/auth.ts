@@ -21,7 +21,7 @@ export const auth = betterAuth({
     },
   },
 
-  baseURL: "http://localhost:8000",
+  baseURL: "https://meeting-room-booking-system-api.onrender.com",
 
   trustedOrigins: [
    "http://localhost:5173",
