@@ -2,12 +2,11 @@ import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 // If your Prisma file is located elsewhere, you can change the path
 import { PrismaClient } from "../../src/generated/prisma/client.js";
+import { prisma } from "./prisma.js";
 
 // 🌟 👑 အဓိက ပြင်ဆင်လိုက်သည့်နေရာ: 
 // Custom Prisma Client အတွက် အနည်းဆုံး လိုအပ်သော configuration options များကို argument အဖြစ် ထည့်ပေးလိုက်ခြင်း
-const prisma = new PrismaClient({
-  log: process.env.NODE_ENV === "development" ? ["query", "error", "warn"] : ["error"],
-});
+
 
 export const auth = betterAuth({
     baseURL: process.env.NODE_ENV === "production" ? "https://meeting-room-booking-system-api.onrender.com" : "http://localhost:8000",
