@@ -9,7 +9,7 @@ import { prisma } from "./prisma.js";
 
 
 export const auth = betterAuth({
-    baseURL: process.env.NODE_ENV === "production" ? "https://meeting-room-booking-system-api.onrender.com" : "http://localhost:8000",
+    baseURL: process.env.BETTER_AUTH_URL || "http://localhost:8080",
 
     database: prismaAdapter(prisma, {
         provider: "postgresql", 
@@ -39,10 +39,15 @@ advanced: {
         // Local မှာဆိုရင် HTTP ကို ခွင့်ပြုဖို့အတွက် secure ကို false ထားပါ
         secure: process.env.NODE_ENV === "production", 
         sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+        partitioned: true,
       }
     }
   }
 },
-  trustedOrigins: ["https://meeting-room-booking-system-neon.vercel.app", "https://meeting-room-booking-system-neon.vercel.app/","https://meeting-room-booking-system-neon.vercel.app/login", "http://localhost:3000"],
-
+  trustedOrigins: [
+    "https://meeting-room-booking-system-neon.vercel.app",
+    "https://meeting-room-booking-system-neon.vercel.app/",
+    "https://meeting-room-booking-system-neon.vercel.app/login",
+    "http://localhost:3000",
+  ],
 });
