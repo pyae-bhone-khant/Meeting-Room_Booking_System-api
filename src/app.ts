@@ -11,28 +11,12 @@ import adminRouter from "./routes/adminRoute/admin.js";
 
 const app = express();
 
-const allowedOrigins = [
-  "http://localhost:5173",                     // Local Vite Frontend
-  "http://localhost:3000",                     // Local Next.js / React Frontend
-  "https://meeting-room-booking-system-neon.vercel.app"   // 👈 မင်းရဲ့ Frontend Public Live URL (အသစ်ထည့်ရန်)
-];
+app.use(cors({
+  origin: ["http://localhost:3000", "http://localhost:5173", "https://meeting-room-booking-system-neon.vercel.app"],
+  credentials: true
+}));
 
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      // Allow requests with no origin (like mobile apps or curl requests)
-      if (!origin) return callback(null, true);
-      
-      if (allowedOrigins.indexOf(origin) !== -1) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true, // 👈 Better-Auth ရဲ့ Session Cookies တွေအတွက် ဒါက မဖြစ်မနေ True ထားရပါမယ်
-  }),
-);
+
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes

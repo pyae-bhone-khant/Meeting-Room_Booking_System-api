@@ -1,45 +1,30 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
-import { prisma } from "./prisma.js";
+// If your Prisma file is located elsewhere, you can change the path
+import { PrismaClient } from "../../src/generated/prisma/client.js";
 
+const prisma = new PrismaClient();
 export const auth = betterAuth({
-  database: prismaAdapter(prisma, {
-    provider: "postgresql",
-  }),
-
-  emailAndPassword: {
-    enabled: true,
-  },
-
-  user: {
-    additionalFields: {
-      role: {
-        type: "string",
-        required: false,
-        defaultValue: "USER",
-      },
+    baseURL: process.env.NODE_ENV === "production" ? "https://meeting-room-booking-system-api.onrender.com" : "http://localhost:8000",
+    trustedOrigins: ["*"],
+    database: prismaAdapter(prisma, {
+        provider: "postgresql", 
+    }),
+    emailAndPassword: { 
+        enabled: true, 
+        requireEmailVerification: false,
     },
-  },
-
-  baseURL: "https://meeting-room-booking-system-api.onrender.com",
- advanced: {
-    cookies: {
-      sessionToken: {
-        // options အစား attributes ဟု သုံးရပါမည်
-        attributes: {
-          sameSite: "none", // 👈 Cross-site Context အတွက်
-          secure: true,     // HTTPS ပေါ်တွင်သာ အလုပ်လုပ်ရန်
-        }
-      }
+    session: {
+        expiresIn: 60 * 60 * 24 * 7, // 7 days
+        updateAge: 60 * 60 * 24, // 1 day
     },
-    crossSubdomainCookies: {
-      enabled: true,
-    }
-  },
-
-  trustedOrigins: [
-   "http://localhost:5173",
-    "http://localhost:3000",
-    "https://meeting-room-booking-system-neon.vercel.app"
-  ],
+    user: {
+        additionalFields: {
+            role: {
+                type: "string",
+                required: false,
+                defaultValue: "USER",
+            },
+        },
+    },
 });
