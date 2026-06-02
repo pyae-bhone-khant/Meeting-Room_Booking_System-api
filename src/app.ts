@@ -2,12 +2,12 @@ import express from "express";
 import { fromNodeHeaders, toNodeHandler } from "better-auth/node";
 import cors from "cors";
 import rateLimit from "express-rate-limit";
-import { auth } from "./lib/auth";
+import { auth } from "./lib/auth.js";
 import { error } from "node:console";
-import { errorHandler } from "./middleware/error-handler";
-import userRouter from "./routes/userroute/user";
-import ownerRouter from "./routes/ownerRoute/owner";
-import adminRouter from "./routes/adminRoute/admin";
+import { errorHandler } from "./middleware/error-handler.js";
+import userRouter from "./routes/userroute/user.js";
+import ownerRouter from "./routes/ownerRoute/owner.js";
+import adminRouter from "./routes/adminRoute/admin.js";
 
 const app = express();
 

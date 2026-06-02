@@ -1,6 +1,6 @@
 
 import { count } from "node:console";
-import { prisma } from "../lib/prisma";
+import { prisma } from "../lib/prisma.js";
 
 export const getAllUsersService = () => {
     return prisma.user.findMany({

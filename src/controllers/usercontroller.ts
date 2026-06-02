@@ -1,8 +1,8 @@
 import type { Request, Response , NextFunction } from "express";
 import { body, param, validationResult } from "express-validator";
-import { prisma } from "../lib/prisma";
+import { prisma } from "../lib/prisma.js";
 import { success } from "better-auth";
-import { createUserBooking, DeleteBookingService, getBookingByDate } from "../services/user";
+import { createUserBooking, DeleteBookingService, getBookingByDate } from "../services/user.js";
 
 export const getAllBooking = async (req: Request, res: Response, next: NextFunction) => {
     

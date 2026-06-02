@@ -1,4 +1,4 @@
-import { auth } from "../lib/auth";
+import { auth } from "../lib/auth.js";
 import type { NextFunction, Request, Response } from "express";
 import type { Session } from "better-auth";
 

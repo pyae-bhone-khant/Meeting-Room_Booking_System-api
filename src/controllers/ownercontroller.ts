@@ -1,7 +1,7 @@
 import type { Request, Response , NextFunction } from "express";
 import { param, validationResult } from "express-validator";
-import { DeleteBookingService, getBookingByDate } from "../services/user";
-import { getAllUsersService } from "../services/owner";
+import { DeleteBookingService, getBookingByDate } from "../services/user.js";
+import { getAllUsersService } from "../services/owner.js";
 
 export const deleteAnyBooking = [
   param('id').trim().notEmpty().withMessage('Booking ID is required'),

@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { getAllBooking, getOwnBookings  , createBooking , deleteBooking} from "../../controllers/usercontroller";
-import { isAuthUser } from "../../middleware/auth";
+import { getAllBooking, getOwnBookings  , createBooking , deleteBooking} from "../../controllers/usercontroller.js";
+import { isAuthUser } from "../../middleware/auth.js";
 
 const router = Router();
 

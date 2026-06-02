@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { getAllBooking, getOwnBookings  , createBooking , } from "../../controllers/usercontroller";
-import { deleteAnyBooking , getUserSummary } from "../../controllers/ownercontroller";
-import { isAuthUser , isOwner } from "../../middleware/auth";
+import { getAllBooking, getOwnBookings  , createBooking , } from "../../controllers/usercontroller.js";
+import { deleteAnyBooking , getUserSummary } from "../../controllers/ownercontroller.js";
+import { isAuthUser , isOwner } from "../../middleware/auth.js";
 
 const router = Router();
 

@@ -1,5 +1,4 @@
 import type { Request, Response, NextFunction } from "express";
-import { prisma } from "../lib/prisma";
 import {
   checkUserByEmail,
   createNewUser,
@@ -7,9 +6,9 @@ import {
   getAllUsersService,
   getUserById,
   updateUserRole,
-} from "../services/admin";
+} from "../services/admin.js";
 import { body, param, validationResult } from "express-validator";
-import { checkUserExists } from "../utils/admin";
+import { checkUserExists } from "../utils/admin.js";
 import bcrypt from "bcrypt";
 
 export const getAllUsers = async (

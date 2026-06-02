@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { getAllBooking, getOwnBookings  , createBooking , } from "../../controllers/usercontroller";
-import { deleteAnyBooking , getUserSummary } from "../../controllers/ownercontroller";
-import { isAdmin, isAuthUser } from "../../middleware/auth";
-import { getAllUsers , createUser , changeUserRole , deleteUser } from "../../controllers/admincontroller";
+import { getAllBooking, getOwnBookings  , createBooking , } from "../../controllers/usercontroller.js";
+import { deleteAnyBooking , getUserSummary } from "../../controllers/ownercontroller.js";
+import { isAdmin, isAuthUser } from "../../middleware/auth.js";
+import { getAllUsers , createUser , changeUserRole , deleteUser } from "../../controllers/admincontroller.js";
 
 const router = Router();
 
