@@ -10,6 +10,7 @@ import {
 import { body, param, validationResult } from "express-validator";
 import { checkUserExists } from "../utils/admin.js";
 import bcrypt from "bcrypt";
+import { auth } from "../lib/auth.js";
 
 export const getAllUsers = async (
   req: Request,
@@ -44,6 +45,78 @@ export const getAllUsers = async (
   }
 };
 
+// export const createUser = [
+
+//   body("name").isString().notEmpty(),
+//   body("email").isEmail().notEmpty(),
+//   body("password")
+//     .isString()
+//     .isLength({ min: 6 })
+//     .withMessage("Password must be at least 6 characters long")
+//     .notEmpty(),
+//   body("role")
+//     .isString()
+//     .notEmpty()
+//     .custom((value) => {
+//       if (value !== "USER" && value !== "ADMIN" && value !== "OWNER") {
+//         throw new Error("Role must be either USER, ADMIN or OWNER");
+//       }
+//       return true;
+//     }),
+//   async (req: Request, res: Response, next: NextFunction) => {
+//     const errors = validationResult(req);
+//     if (!errors.isEmpty()) {
+//       return res.status(400).json({
+//         success: false,
+//         message: errors.array()[0]?.msg || "Validation failed",
+//       });
+//     }
+//     try {
+//       const adminRole = req.user?.role;
+//       if (adminRole !== "ADMIN") {
+//         return res.status(403).json({
+//           success: false,
+//           message: "Access denied , Only admin can create user",
+//         });
+//       }
+
+//       const { name, email, password, role } = req.body;
+
+//       const user = await checkUserByEmail(email);
+//       await checkUserExists(user);
+
+//       const salt = 10;
+//       const hashedPassword = await bcrypt.hash(password, salt);
+
+//       const userId = `user_${Date.now()}`;
+
+//       const userData = {
+//         id: userId,
+//         name,
+//         email,
+//         role: role || "USER",
+//         accounts: {
+//           create: {
+//             id: `acc_${Date.now()}`,
+//             providerId: "credentials", // Manual login ဖြစ်လို့ credentials လို့ ပေးထားပါမယ်
+//             accountId: userId,
+//             password: hashedPassword,
+//           },
+//         },
+//       };
+
+//       const newuser = await createNewUser(userData);
+//       return res.status(201).json({
+//         success: true,
+//         message: "User created successfully with secure password",
+//         data: newuser,
+//       });
+//     } catch (error) {
+//       next(error);
+//     }
+//   },
+// ]; 
+
 export const createUser = [
   body("name").isString().notEmpty(),
   body("email").isEmail().notEmpty(),
@@ -74,42 +147,35 @@ export const createUser = [
       if (adminRole !== "ADMIN") {
         return res.status(403).json({
           success: false,
-          message: "Access denied , Only admin can create user",
+          message: "Access denied, Only admin can create user",
         });
       }
 
       const { name, email, password, role } = req.body;
 
-      const user = await checkUserByEmail(email);
-      await checkUserExists(user);
+      const newUserResponse = await auth.api.signUpEmail({
+        body: {
+          email: email,
+          password: password,
+          name: name,
+          role: role || "USER", 
+        }
+      });
 
-      const salt = 10;
-      const hashedPassword = await bcrypt.hash(password, salt);
-
-      const userId = `user_${Date.now()}`;
-
-      const userData = {
-        id: userId,
-        name,
-        email,
-        role: role || "USER",
-        accounts: {
-          create: {
-            id: `acc_${Date.now()}`,
-            providerId: "credentials", // Manual login ဖြစ်လို့ credentials လို့ ပေးထားပါမယ်
-            accountId: userId,
-            password: hashedPassword,
-          },
-        },
-      };
-
-      const newuser = await createNewUser(userData);
       return res.status(201).json({
         success: true,
-        message: "User created successfully with secure password",
-        data: newuser,
+        message: "User created successfully via Better-Auth engine",
+        data: newUserResponse.user,
       });
-    } catch (error) {
+
+    } catch (error: any) {
+      
+      if (error.code === "EMAIL_ALREADY_EXISTS" || error.status === 400) {
+        return res.status(400).json({
+          success: false,
+          message: "Email already exists in the system",
+        });
+      }
       next(error);
     }
   },
