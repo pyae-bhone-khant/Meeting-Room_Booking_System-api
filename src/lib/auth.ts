@@ -37,9 +37,9 @@ advanced: {
     sessionToken: {
       attributes: {
         // Local မှာဆိုရင် HTTP ကို ခွင့်ပြုဖို့အတွက် secure ကို false ထားပါ
-        secure: process.env.NODE_ENV === "production", 
-        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-        partitioned: true,
+       SameSite:"None",
+       Secure:true,
+       partitioned: true,
       }
     }
   }
