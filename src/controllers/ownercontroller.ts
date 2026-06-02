@@ -25,7 +25,7 @@ export const deleteAnyBooking = [
       })
      }
 
-    if(role !== "OWNER") {
+    if(role !== "OWNER" && role !== "ADMIN") {
        return res.status(403).json({
         success : false , 
         message : "That booking to delete you don't have permission"
@@ -52,7 +52,7 @@ export const getUserSummary = async (req : Request , res : Response , next : Nex
           message : "Unauthorized"
         })
       } 
-      if (role !== "OWNER") {
+      if (role !== "OWNER" && role !== "ADMIN") {
         return res.status(403).json({
           success : false , 
           message : "You don't have permission to access this resource"

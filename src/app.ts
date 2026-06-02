@@ -7,6 +7,7 @@ import { error } from "node:console";
 import { errorHandler } from "./middleware/error-handler";
 import userRouter from "./routes/userroute/user";
 import ownerRouter from "./routes/ownerRoute/owner";
+import adminRouter from "./routes/adminRoute/admin";
 
 const app = express();
 
@@ -36,6 +37,7 @@ app.use(express.json());
  
 app.use("/api", userRouter);
 app.use("/api", ownerRouter);
+app.use("/api", adminRouter);
 
 app.get("/error", async (req, res) => {
   throw new Error("Test Error");

@@ -37,7 +37,7 @@ export const isAdmin = (req: Request, res: Response, next: NextFunction) => {
 };
 
 export const isOwner = (req: Request, res: Response, next: NextFunction) => {
-  if (req.user && req.user?.role === "OWNER") {
+  if (req.user && (req.user?.role === "OWNER" || req.user?.role === "ADMIN")) {
     next();
   } else {
     return res.status(403).json({ message: "Forbidden" });
