@@ -46,9 +46,9 @@ advanced: {
 },
   trustedOrigins: [
     "https://meeting-room-booking-system-neon.vercel.app",
-    "https://meeting-room-booking-system-neon.vercel.app/",
-    "https://meeting-room-booking-system-neon.vercel.app/login",
     "https://meeting-room-booking-system-bfoy.onrender.com",
     "http://localhost:3000",
   ],
 });
+
+console.log("AUTH LOADED");
