@@ -10,7 +10,7 @@ import { prisma } from "./prisma.js";
 
 export const auth = betterAuth({
     baseURL: process.env.NODE_ENV === "production" ? "https://meeting-room-booking-system-api.onrender.com" : "http://localhost:8000",
-    trustedOrigins: ["*"],
+
     database: prismaAdapter(prisma, {
         provider: "postgresql", 
     }),
@@ -31,4 +31,18 @@ export const auth = betterAuth({
             },
         },
     },
+    // auth.ts ထဲတွင်
+advanced: {
+  cookies: {
+    sessionToken: {
+      attributes: {
+        // Local မှာဆိုရင် HTTP ကို ခွင့်ပြုဖို့အတွက် secure ကို false ထားပါ
+        secure: process.env.NODE_ENV === "production", 
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      }
+    }
+  }
+},
+  trustedOrigins: ["https://meeting-room-booking-system-neon.vercel.app", "http://localhost:3000"],
+
 });

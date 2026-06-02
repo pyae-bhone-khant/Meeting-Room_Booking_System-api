@@ -13,7 +13,9 @@ const app = express();
 
 app.use(cors({
   origin: ["http://localhost:3000", "http://localhost:5173", "https://meeting-room-booking-system-neon.vercel.app"],
-  credentials: true
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE"], // Specify allowed HTTP methods
+   
 }));
 
 
