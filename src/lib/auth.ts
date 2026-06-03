@@ -33,18 +33,7 @@ export const auth = betterAuth({
         },
     },
     // auth.ts ထဲတွင်
-advanced: {
-  cookies: {
-    sessionToken: {
-      attributes: {
-        // Local မှာဆိုရင် HTTP ကို ခွင့်ပြုဖို့အတွက် secure ကို false ထားပါ
-       sameSite:"none",
-       secure:true,
-       partitioned: true,
-      }
-    }
-  }
-},
+
   trustedOrigins: [
     "https://meeting-room-booking-system-neon.vercel.app",
     "https://meeting-room-booking-system-bfoy.onrender.com",
