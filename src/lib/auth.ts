@@ -1,11 +1,6 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
-// If your Prisma file is located elsewhere, you can change the path
-import { PrismaClient } from "../../src/generated/prisma/client.js";
 import { prisma } from "./prisma.js";
-
-// 🌟 👑 အဓိက ပြင်ဆင်လိုက်သည့်နေရာ: 
-// Custom Prisma Client အတွက် အနည်းဆုံး လိုအပ်သော configuration options များကို argument အဖြစ် ထည့်ပေးလိုက်ခြင်း
 
 console.log("AUTH LOADED");
 
@@ -19,20 +14,31 @@ export const auth = betterAuth({
         enabled: true, 
         requireEmailVerification: false,
     },
-    advanced :{
+    
+    // ✅ ၁။ စာလုံးပေါင်းကို သင့်နဂိုမူလအတိုင်း 'crossSubDomainCookies' ပြန်ပြောင်းထားပါတယ်
+    advanced: {
       crossSubDomainCookies: {
         enabled: true,
       },
-      cookies : {
-        sessionToken: {
-          name: "session",
-          attributes: {
-            secure: true,
-            sameSite: "none",
-          }
+    },
+
+    // ✅ ၂။ cookies config ကို advanced အပြင်ဘက် (core options) ထဲမှာပဲ သီးသန့်ထားရပါမယ်
+    // ဒါဆိုရင် TypeScript Error လည်း ပျောက်သွားပြီး sign-out cookie လည်း အလုပ်လုပ်ပါလိမ့်မယ်
+    cookies: {
+      sessionToken: {
+        attributes: {
+          secure: true,
+          sameSite: "none",
+        }
+      },
+      dontRemember: {
+        attributes: {
+          secure: true,
+          sameSite: "none",
         }
       }
     },
+
     session: {
         expiresIn: 60 * 60 * 24 * 7, // 7 days
         updateAge: 60 * 60 * 24, // 1 day
@@ -46,12 +52,10 @@ export const auth = betterAuth({
             },
         },
     },
-    // auth.ts ထဲတွင်
-
-  trustedOrigins: [
-    "https://meeting-room-booking-system-neon.vercel.app",
-    "https://meeting-room-booking-system-bfoy.onrender.com",
-    "http://localhost:3000",
-  ],
+    
+    trustedOrigins: [
+      "https://meeting-room-booking-system-neon.vercel.app",
+      "https://meeting-room-booking-system-bfoy.onrender.com",
+      "http://localhost:3000",
+    ],
 });
-
