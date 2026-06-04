@@ -4,8 +4,22 @@ import { prisma } from "./prisma.js";
 
 console.log("AUTH LOADED");
 
+const baseURL = process.env.BETTER_AUTH_URL || "http://localhost:8080";
+const parsedBaseURL = (() => {
+  try {
+    return new URL(baseURL);
+  } catch {
+    return null;
+  }
+})();
+const cookieDomain = parsedBaseURL && !["localhost", "127.0.0.1"].includes(parsedBaseURL.hostname)
+  ? parsedBaseURL.hostname
+  : undefined;
+const cookieSecure = parsedBaseURL?.protocol === "https:";
+const cookieSameSite = parsedBaseURL?.protocol === "https:" ? "none" : "lax";
+
 export const auth = betterAuth({
-    baseURL: process.env.BETTER_AUTH_URL || "http://localhost:8080",
+    baseURL,
 
     database: prismaAdapter(prisma, {
         provider: "postgresql", 
@@ -15,28 +29,35 @@ export const auth = betterAuth({
         requireEmailVerification: false,
     },
     
-    // ✅ ၁။ စာလုံးပေါင်းကို သင့်နဂိုမူလအတိုင်း 'crossSubDomainCookies' ပြန်ပြောင်းထားပါတယ်
+    // ✅ Use the correct Better-Auth cookie config path and avoid invalid domain on localhost.
     advanced: {
-      crossSubDomainCookies: {
-        enabled: true,
+      useSecureCookies: cookieSecure,
+      crossSubDomainCookies: cookieDomain
+        ? {
+            enabled: true,
+            domain: cookieDomain,
+          }
+        : {
+            enabled: false,
+          },
+      defaultCookieAttributes: {
+        secure: cookieSecure,
+        sameSite: cookieSameSite,
       },
-    },
-
-    // ✅ ၂။ cookies config ကို advanced အပြင်ဘက် (core options) ထဲမှာပဲ သီးသန့်ထားရပါမယ်
-    // ဒါဆိုရင် TypeScript Error လည်း ပျောက်သွားပြီး sign-out cookie လည်း အလုပ်လုပ်ပါလိမ့်မယ်
-    cookies: {
-      sessionToken: {
-        attributes: {
-          secure: true,
-          sameSite: "none",
-        }
+      cookies: {
+        session_token: {
+          attributes: {
+            secure: cookieSecure,
+            sameSite: cookieSameSite,
+          },
+        },
+        dont_remember: {
+          attributes: {
+            secure: cookieSecure,
+            sameSite: cookieSameSite,
+          },
+        },
       },
-      dontRemember: {
-        attributes: {
-          secure: true,
-          sameSite: "none",
-        }
-      }
     },
 
     session: {
