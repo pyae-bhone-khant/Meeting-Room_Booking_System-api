@@ -46,15 +46,18 @@ export const auth = betterAuth({
       },
       cookies: {
         session_token: {
+           name: "__Secure-better-auth.session_token",
           attributes: {
             secure: cookieSecure,
             sameSite: cookieSameSite,
+            partitioned: true,
           },
         },
         dont_remember: {
           attributes: {
             secure: cookieSecure,
             sameSite: cookieSameSite,
+            partitioned: true,
           },
         },
       },
