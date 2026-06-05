@@ -30,6 +30,7 @@
     "express-rate-limit": "^8.5.2",
     "express-validator": "^7.3.2",
     "pg": "^8.21.0",
+    "resend": "^6.12.4",
     "ws": "^8.21.0"
   },
   "devDependencies": {

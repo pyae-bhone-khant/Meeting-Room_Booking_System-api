@@ -1,6 +1,7 @@
 import { auth } from "../lib/auth.js";
 import type { NextFunction, Request, Response } from "express";
 import type { Session } from "better-auth";
+import { fromNodeHeaders } from "better-auth/node";
 
 declare global {
   namespace Express {
@@ -12,14 +13,15 @@ declare global {
   }
 }
 
+
 export const  isAuthUser = async (
   req: Request,
   res: Response,
   next: NextFunction,
 ) => {
-  const session = await auth.api.getSession({
-    headers: req.headers as any,
-  });
+   const session = await auth.api.getSession({
+      headers: fromNodeHeaders(req.headers),
+    });
   if (!session) {
     return res.status(401).json({ message: "Please login" });
   }
