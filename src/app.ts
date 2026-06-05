@@ -14,7 +14,7 @@ const app = express();
 app.set("trust proxy", 1);
 
 app.use(cors({
-  origin: ["http://localhost:3000", "http://localhost:5173", "https://meeting-room-booking-system-neon.vercel.app" , "https://meeting-room-booking-system-bfoy.onrender.com" ,"https://meeting-room-booking-system-iota.vercel.app"],
+  origin: ["http://localhost:3000", "http://localhost:5173", "https://meeting-room-booking-system-q6xr0ifk6.vercel.app"],
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE" , "OPTIONS"], // Specify allowed HTTP methods
    

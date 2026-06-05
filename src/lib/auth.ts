@@ -115,5 +115,5 @@ export const auth = betterAuth({
       },
     },
   },
-  trustedOrigins: ["https://meeting-room-booking-system-neon.vercel.app", "http://localhost:3000"],
+  trustedOrigins: ["https://meeting-room-booking-system-neon.vercel.app", "https://meeting-room-booking-system-q6xr0ifk6.vercel.app" , "http://localhost:3000"],
 });
