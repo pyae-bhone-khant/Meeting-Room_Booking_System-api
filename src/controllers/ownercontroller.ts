@@ -64,6 +64,7 @@ export const getUserSummary = async (req : Request , res : Response , next : Nex
        userId: user.id,
       userName: user.name,
       userEmail: user.email,
+      role: user.role,
       totalBookings: user._count.bookings,
       bookings: user.bookings
       }));

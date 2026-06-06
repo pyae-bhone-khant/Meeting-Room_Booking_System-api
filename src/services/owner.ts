@@ -8,6 +8,7 @@ export const getAllUsersService = () => {
         id: true,
         name: true,
         email: true,
+        role: true,
         _count: {
           select: { bookings: true } 
         },
