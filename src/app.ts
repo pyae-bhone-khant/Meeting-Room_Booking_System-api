@@ -1,47 +1,52 @@
-import { prisma } from "./lib/prisma.js";
-import { betterAuth } from "better-auth";
-import { prismaAdapter } from "better-auth/adapters/prisma";
+import express from "express";
+import { fromNodeHeaders, toNodeHandler } from "better-auth/node";
+import cors from "cors";
+import rateLimit from "express-rate-limit";
+import { auth } from "./lib/auth.js";
+import { error } from "node:console";
+import { errorHandler } from "./middleware/error-handler.js";
+import userRouter from "./routes/userroute/user.js";
+import ownerRouter from "./routes/ownerRoute/owner.js";
+import adminRouter from "./routes/adminRoute/admin.js";
 
-export const auth = betterAuth({
-  database: prismaAdapter(prisma, {
-    provider: "postgresql",
-  }),
-  emailAndPassword: {
-    enabled: true,
-  },
-  user: {
-    additionalFields: {
-      role: {
-        type: "string",
-        required: false,
-      },
-    },
-  },
-  session: {
-    additionalFields: {
-      role: {
-        type: "string",
-        required: false,
-      },
-    },
-  },
-  trustedOrigins: [
-    "https://meeting-room-booking-system-neon.vercel.app", 
-    "https://meeting-room-booking-system-q6xr0ifk6.vercel.app", 
-    "http://localhost:3000", 
-    "https://meeting-room-booking-system-iota.vercel.app"
-  ],
+const app = express();
 
-  // 👇 အောက်ပါ advanced block ကို အသစ်ထည့်ပေးပါ 👇
-  advanced: {
-    useSecureCookies: true, // Production (HTTPS) တွင် Secure cookie ဖြစ်စေရန်
-    cookies: {
-      session_token: {
-        attributes: {
-          sameSite: "none", // Cross-domain (Frontend <-> Backend) အတွက် "none" ဖြစ်ရပါမည်
-          secure: true,     // sameSite: "none" သုံးလျှင် secure: true မဖြစ်မနေ လိုအပ်ပါသည်
-        },
-      },
-    },
-  },
+app.set("trust proxy", 1);
+
+app.use(cors({
+  origin: ["http://localhost:3000", "http://localhost:5173","https://meeting-room-booking-system-iota.vercel.app"],
+  credentials: true,
+   allowedHeaders: ["Content-Type", "Authorization"],
+  methods: ["GET", "POST", "PUT", "DELETE" , "OPTIONS"], // Specify allowed HTTP methods
+   
+}));
+
+
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
+  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+  message: "Too many requests from this IP, please try again after 15 minutes",
 });
+
+app.use(limiter);
+
+app.use(express.json());
+app.all("/api/auth/*splat", toNodeHandler(auth));
+
+app.use(express.static("uploads"));
+ 
+app.use("/api", userRouter);
+app.use("/api", ownerRouter);
+app.use("/api", adminRouter);
+
+app.get("/error", async (req, res) => {
+  throw new Error("Test Error");
+});
+
+
+app.use(errorHandler);
+
+export default app;
