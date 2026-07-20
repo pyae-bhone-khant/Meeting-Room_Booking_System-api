@@ -16,6 +16,7 @@ app.set("trust proxy", 1);
 app.use(cors({
   origin: ["http://localhost:3000", "http://localhost:5173","https://meeting-room-booking-system-iota.vercel.app"],
   credentials: true,
+   allowedHeaders: ["Content-Type", "Authorization"],
   methods: ["GET", "POST", "PUT", "DELETE" , "OPTIONS"], // Specify allowed HTTP methods
    
 }));
