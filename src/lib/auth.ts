@@ -32,14 +32,15 @@ export const auth = betterAuth({
     "https://meeting-room-booking-system-iota.vercel.app"
   ],
 
-  // 👇 အောက်ပါ advanced block ကို အသစ်ထည့်ပေးပါ 👇
+
   advanced: {
-    useSecureCookies: true, // Production (HTTPS) တွင် Secure cookie ဖြစ်စေရန်
+    useSecureCookies: true, 
     cookies: {
       session_token: {
         attributes: {
-          sameSite: "none", // Cross-domain (Frontend <-> Backend) အတွက် "none" ဖြစ်ရပါမည်
-          secure: true,     // sameSite: "none" သုံးလျှင် secure: true မဖြစ်မနေ လိုအပ်ပါသည်
+          sameSite: "none",
+          secure: true,     
+          partitioned: true,
         },
       },
     },
